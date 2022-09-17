@@ -1,0 +1,61 @@
+body {
+  background: linear-gradient(
+    90.9deg,
+    rgb(255, 187, 187) -8.8%,
+    rgb(255, 220, 177) 12.4%,
+    rgb(255, 249, 177) 35.6%,
+    rgb(220, 255, 177) 59.6%,
+    rgb(177, 218, 255) 84%,
+    rgb(222, 177, 255) 107.9%
+  );
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  padding: 0 20px;
+}
+h1 {
+  font-weight: 900;
+  color: blueviolet;
+  margin-top: 30px;
+}
+img {
+  display: block;
+  padding: 20px;
+  border-radius: 50px;
+}
+input {
+  font-size: 20px;
+  background: linear-gradient(
+    90.9deg,
+    rgb(255, 187, 187) -8.8%,
+    rgb(255, 220, 177) 12.4%,
+    rgb(255, 249, 177) 35.6%,
+    rgb(220, 255, 177) 59.6%,
+    rgb(177, 218, 255) 84%,
+    rgb(222, 177, 255) 107.9%
+  );
+  margin: 20px;
+  margin-left: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+.card {
+  background: rgb(220, 255, 177);
+}
+.heading {
+  font-weight: bold;
+  font-size: 20px;
+}
+.col-1 {
+  text-decoration: underline;
+}
+
+video {
+  width: 300px;
+  margin-top: 60px;
+  border-radius: 50px;
+}
+.weather-app {
+  border: 1px solid grey;
+  padding: 15px;
+  margin: 10px auto;
+  max-width: 600px;
+  border-radius: 20px;
+}
