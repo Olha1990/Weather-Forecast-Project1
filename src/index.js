@@ -99,10 +99,16 @@ searchForm.addEventListener("submit", handleSubmit);
 
 search("Odesa");
 
+let celsiusTemperature = null;
+let feelsLikeTemperature = null;
+
 function showWeather(response) {
   let h1 = document.querySelector("h1");
   let temperature = Math.round(response.data.main.temp);
   h1.innerHTML = `It is currently ${temperature}°C in ${response.data.name}`;
+
+  celsiusTemperature = response.data.main.temp;
+  feelsLikeTemperature = response.data.main.feels_like;
 }
 
 function retrievePosition(position) {
@@ -115,12 +121,9 @@ function retrievePosition(position) {
 
 navigator.geolocation.getCurrentPosition(retrievePosition);
 
-celsiusTemperature = response.data.main.temp;
-feelsLikeTemperature = response.data.main.feels_like;
-
 function displayFahrenheitTemp(event) {
   event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
+  let temperatureElement = document.querySelector("#weather");
   let fahrenheitTemperature = (celsiusTemperature * 9) / 5 + 32;
   temperatureElement.innerHTML = Math.round(fahrenheitTemperature);
 }
@@ -145,9 +148,6 @@ function displayFeelsLikeCelsiusTemp(event) {
   feelsLikeCelsius.innerHTML = Math.round(feelsLikeTemperature);
 }
 
-let celsiusTemperature = null;
-let feelsLikeTemperature = null;
-
 let fahrenheitLink = document.querySelector("#fahrenheit-link");
 fahrenheitLink.addEventListener("click", displayFahrenheitTemp);
 
@@ -165,3 +165,18 @@ feelsLikeFahrenheitLink.addEventListener(
 
 let feelsLikeCelsiusLink = document.querySelector("#feels-like-celsius-link");
 feelsLikeCelsiusLink.addEventListener("click", displayFeelsLikeCelsiusTemp);
+
+function displayForecast(response) {
+  let forecastElement = document.querySelector("#forecast");
+  console.log(response.list);
+}
+
+function getForecast(coordinates) {
+  let apiKey = "1c261165a83cd1aba6460cd11d191483";
+  let lat = position.coords.latitude;
+  let lon = position.coords.longitude;
+  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat={coordinates.lat}&lon={coordinates.lon}&appid={apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayForecast);
+}
+
+navigator.geolocation.getCurrentPosition(getForecast);
