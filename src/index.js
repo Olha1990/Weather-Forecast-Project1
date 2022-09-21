@@ -99,26 +99,6 @@ searchForm.addEventListener("submit", handleSubmit);
 
 search("Odesa");
 
-//Bonus Feature
-function convertToFahrenheit(event) {
-  event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
-  temperatureElement.innerHTML = 66;
-}
-
-function convertToCelsius(event) {
-  event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
-  temperatureElement.innerHTML = 19;
-}
-
-//let fahrenheitLink = document.querySelector("#fahrenheit-link");
-//fahrenheitLink.addEventListener("click", convertToFahrenheit);
-
-//let celsiusLink = document.querySelector("#celsius-link");
-//celsiusLink.addEventListener("click", convertToCelsius);
-
-//currentlocation
 function showWeather(response) {
   let h1 = document.querySelector("h1");
   let temperature = Math.round(response.data.main.temp);
@@ -134,3 +114,54 @@ function retrievePosition(position) {
 }
 
 navigator.geolocation.getCurrentPosition(retrievePosition);
+
+celsiusTemperature = response.data.main.temp;
+feelsLikeTemperature = response.data.main.feels_like;
+
+function displayFahrenheitTemp(event) {
+  event.preventDefault();
+  let temperatureElement = document.querySelector("#temperature");
+  let fahrenheitTemperature = (celsiusTemperature * 9) / 5 + 32;
+  temperatureElement.innerHTML = Math.round(fahrenheitTemperature);
+}
+
+function displayCelsiusTemp(event) {
+  event.preventDefault();
+  let temperatureElement = document.querySelector("#temperature");
+  temperatureElement.innerHTML = Math.round(celsiusTemperature);
+}
+
+function displayFeelsLikeFahrenheitTemp(event) {
+  event.preventDefault();
+  let feelsLikeFahrenheit = document.querySelector("#feels-like");
+  feelsLikeFahrenheit.innerHTML = Math.round(
+    (feelsLikeTemperature * 9) / 5 + 32
+  );
+}
+
+function displayFeelsLikeCelsiusTemp(event) {
+  event.preventDefault();
+  let feelsLikeCelsius = document.querySelector("#feels-like");
+  feelsLikeCelsius.innerHTML = Math.round(feelsLikeTemperature);
+}
+
+let celsiusTemperature = null;
+let feelsLikeTemperature = null;
+
+let fahrenheitLink = document.querySelector("#fahrenheit-link");
+fahrenheitLink.addEventListener("click", displayFahrenheitTemp);
+
+let celsiusLink = document.querySelector("#celsius-link");
+celsiusLink.addEventListener("click", displayCelsiusTemp);
+
+let feelsLikeFahrenheitLink = document.querySelector(
+  "#feels-like-fahrenheit-link"
+);
+
+feelsLikeFahrenheitLink.addEventListener(
+  "click",
+  displayFeelsLikeFahrenheitTemp
+);
+
+let feelsLikeCelsiusLink = document.querySelector("#feels-like-celsius-link");
+feelsLikeCelsiusLink.addEventListener("click", displayFeelsLikeCelsiusTemp);
