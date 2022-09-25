@@ -169,7 +169,8 @@ function filterForecastItemsByTime(forecastItems, timeStr) {
 }
 
 function setForecastForDay(day, forecastForDay) {
-  let temperatureIconAndValue = `<img src="https://ssl.gstatic.com/onebox/weather/48/partly_cloudy.png" alt="partly cloudy icon" class="weather-icon" id="forecast"/>${forecastForDay.main.temp}°C`;
+  let temperature = Math.round(forecastForDay.main.temp);
+  let temperatureIconAndValue = `<img src="https://ssl.gstatic.com/onebox/weather/48/partly_cloudy.png" alt="partly cloudy icon" class="weather-icon" id="forecast"/>${temperature}°C`;
   document.querySelector(`#day${day} h5`).innerHTML = forecastForDay.dt_txt;
   document.querySelector(`#day${day} p`).innerHTML = temperatureIconAndValue;
 }
@@ -182,7 +183,7 @@ function displayForecast(response) {
   }
 }
 
-function forecastByPosition(position) {
+function forecastByPosition(coordinates) {
   let apiKey = "1c261165a83cd1aba6460cd11d191483";
   let lat = coordinates.coords.latitude;
   let lon = coordinates.coords.longitude;
