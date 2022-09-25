@@ -111,15 +111,13 @@ function showWeather(response) {
   feelsLikeTemperature = response.data.main.feels_like;
 }
 
-function retrievePosition(position) {
+function weatherByPosition(position) {
   let apiKey = "1c261165a83cd1aba6460cd11d191483";
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
   let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
   axios.get(url).then(showWeather);
 }
-
-navigator.geolocation.getCurrentPosition(retrievePosition);
 
 function displayFahrenheitTemp(event) {
   event.preventDefault();
@@ -166,17 +164,35 @@ feelsLikeFahrenheitLink.addEventListener(
 let feelsLikeCelsiusLink = document.querySelector("#feels-like-celsius-link");
 feelsLikeCelsiusLink.addEventListener("click", displayFeelsLikeCelsiusTemp);
 
-function displayForecast(response) {
-  let forecastElement = document.querySelector("#forecast");
-  console.log(response.list);
+function filterForecastItemsByTime(forecastItems, timeStr) {
+  return forecastItems.filter((item) => item.dt_txt.endsWith(timeStr));
 }
 
-function getForecast(coordinates) {
+function setForecastForDay(day, forecastForDay) {
+  let temperatureIconAndValue = `<img src="https://ssl.gstatic.com/onebox/weather/48/partly_cloudy.png" alt="partly cloudy icon" class="weather-icon" id="forecast"/>${forecastForDay.main.temp}°C`;
+  document.querySelector(`#day${day} h5`).innerHTML = forecastForDay.dt_txt;
+  document.querySelector(`#day${day} p`).innerHTML = temperatureIconAndValue;
+}
+
+function displayForecast(response) {
+  let forecastPerDay = filterForecastItemsByTime(response.data.list, "3:00:00");
+  for (dayIndex in forecastPerDay) {
+    let oneBasedId = Number(dayIndex) + 1;
+    setForecastForDay(oneBasedId, forecastPerDay[dayIndex]);
+  }
+}
+
+function forecastByPosition(position) {
   let apiKey = "1c261165a83cd1aba6460cd11d191483";
-  let lat = position.coords.latitude;
-  let lon = position.coords.longitude;
-  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat={coordinates.lat}&lon={coordinates.lon}&appid={apiKey}&units=metric`;
+  let lat = coordinates.coords.latitude;
+  let lon = coordinates.coords.longitude;
+  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
   axios.get(apiUrl).then(displayForecast);
 }
 
-navigator.geolocation.getCurrentPosition(getForecast);
+function showWeatherAndForeastByPosition(position) {
+  weatherByPosition(position);
+  forecastByPosition(position);
+}
+
+navigator.geolocation.getCurrentPosition(showWeatherAndForeastByPosition);
