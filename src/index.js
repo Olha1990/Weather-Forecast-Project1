@@ -170,8 +170,10 @@ function filterForecastItemsByTime(forecastItems, timeStr) {
 
 function setForecastForDay(day, forecastForDay) {
   let temperature = Math.round(forecastForDay.main.temp);
+  let date = new Date(forecastForDay.dt * 1000);
+  date.toDateString();
   let temperatureIconAndValue = `<img src="https://ssl.gstatic.com/onebox/weather/48/partly_cloudy.png" alt="partly cloudy icon" class="weather-icon" id="forecast"/>${temperature}°C`;
-  document.querySelector(`#day${day} h5`).innerHTML = forecastForDay.dt_txt;
+  document.querySelector(`#day${day} h5`).innerHTML = date.toDateString();
   document.querySelector(`#day${day} p`).innerHTML = temperatureIconAndValue;
 }
 
