@@ -169,10 +169,15 @@ function filterForecastItemsByTime(forecastItems, timeStr) {
 }
 
 function setForecastForDay(day, forecastForDay) {
-  let temperature = Math.round(forecastForDay.main.temp);
+  let temperatureMin = Math.round(forecastForDay.main.temp_min);
+  let temperatureMax = Math.round(forecastForDay.main.temp_max);
   let date = new Date(forecastForDay.dt * 1000);
   date.toDateString();
-  let temperatureIconAndValue = `<img src="https://ssl.gstatic.com/onebox/weather/48/partly_cloudy.png" alt="partly cloudy icon" class="weather-icon" id="forecast"/>${temperature}°C`;
+  let temperatureIconAndValue = `<img
+          src="http://openweathermap.org/img/wn/${forecastForDay.weather[0].icon}@2x.png"
+          alt=""
+          width="100" class="weather-icon" id="forecast"/>${temperatureMin}°C ${temperatureMax}°C`;
+  console.log(forecastForDay);
   document.querySelector(`#day${day} h5`).innerHTML = date.toDateString();
   document.querySelector(`#day${day} p`).innerHTML = temperatureIconAndValue;
 }
@@ -185,6 +190,37 @@ function displayForecast(response) {
   }
 }
 
+function setForecast(day, forecastForDay) {
+  let temperatureMin = Math.round(forecastForDay.temp.min);
+  let temperatureMax = Math.round(forecastForDay.temp.max);
+  let date = new Date(forecastForDay.dt * 1000);
+  date.toDateString();
+  let temperatureIconAndValue = `<img
+          src="http://openweathermap.org/img/wn/${forecastForDay.weather[0].icon}@2x.png"
+          alt=""
+          width="100" class="weather-icon" id="forecast"/>${temperatureMin}°C ${temperatureMax}°C`;
+  console.log(forecastForDay);
+  document.querySelector(`#day${day} h5`).innerHTML = date.toDateString();
+  document.querySelector(`#day${day} p`).innerHTML = temperatureIconAndValue;
+}
+
+function displayTemp(response) {
+  let daily = response.data.daily;
+  for (let i = 0; i < 5; i++) {
+    setForecast(i + 1, daily[i]);
+  }
+  console.log("call and display temperature");
+  console.log(response);
+}
+
+function dailyTemperature(coordinates) {
+  let apiKey = "1c261165a83cd1aba6460cd11d191483";
+  let lat = coordinates.coords.latitude;
+  let lon = coordinates.coords.longitude;
+  let apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=hourly&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayTemp);
+}
+
 function forecastByPosition(coordinates) {
   let apiKey = "1c261165a83cd1aba6460cd11d191483";
   let lat = coordinates.coords.latitude;
@@ -194,8 +230,8 @@ function forecastByPosition(coordinates) {
 }
 
 function showWeatherAndForeastByPosition(position) {
-  weatherByPosition(position);
-  forecastByPosition(position);
+  dailyTemperature(position);
+  //forecastByPosition(position);
 }
 
 navigator.geolocation.getCurrentPosition(showWeatherAndForeastByPosition);
