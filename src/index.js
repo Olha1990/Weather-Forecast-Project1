@@ -91,6 +91,8 @@ function search(city) {
         console.log(status);
         if (status == 404) {
           document.querySelector("#city-input").classList.add("city-input");
+        } else {
+          document.querySelector("#city-input").classList.remove("city-input");
         }
         return status < 500; // Resolve only if the status code is less than 500
       },
