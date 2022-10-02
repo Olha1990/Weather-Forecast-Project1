@@ -85,7 +85,17 @@ function displayWeatherCondition(response) {
 function search(city) {
   let apiKey = "1c261165a83cd1aba6460cd11d191483";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(displayWeatherCondition);
+  axios
+    .get(apiUrl, {
+      validateStatus: function (status) {
+        console.log(status);
+        if (status == 404) {
+          document.querySelector("#city-input").classList.add("city-input");
+        }
+        return status < 500; // Resolve only if the status code is less than 500
+      },
+    })
+    .then(displayWeatherCondition);
 }
 
 function handleSubmit(event) {
@@ -109,6 +119,18 @@ function showWeather(response) {
 
   celsiusTemperature = response.data.main.temp;
   feelsLikeTemperature = response.data.main.feels_like;
+
+  let sunrise = new Date(response.data.sys.sunrise * 1000);
+  document.querySelector(
+    "#sunrise"
+  ).innerHTML = `🌅 sunrise ${sunrise.toLocaleTimeString()}`;
+  let sunset = new Date(response.data.sys.sunset * 1000);
+  document.querySelector(
+    "#sunset"
+  ).innerHTML = `🌅 sunset ${sunset.toLocaleTimeString()}`;
+  document.querySelector("#description").innerHTML =
+    response.data.weather[0].main;
+  console.log(response);
 }
 
 function weatherByPosition(position) {
@@ -128,7 +150,7 @@ function displayFahrenheitTemp(event) {
 
 function displayCelsiusTemp(event) {
   event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
+  let temperatureElement = document.querySelector("#weather");
   temperatureElement.innerHTML = Math.round(celsiusTemperature);
 }
 
@@ -197,6 +219,19 @@ function dailyTemperature(coordinates) {
   let lon = coordinates.coords.longitude;
   let apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=hourly&appid=${apiKey}&units=metric`;
   axios.get(apiUrl).then(displayTemp);
+}
+
+function displaySunriseSunset(response) {
+  let sun = response.data.daily;
+  console.log(response);
+}
+
+function sunriseSunset(coordinates) {
+  let apiKey = "1c261165a83cd1aba6460cd11d191483";
+  let lat = coordinates.coords.latitude;
+  let lon = coordinates.coords.longitude;
+  let apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=hourly&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displaySunriseSunset);
 }
 
 function showWeatherAndForeastByPosition(position) {
