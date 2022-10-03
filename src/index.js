@@ -90,11 +90,18 @@ function search(city) {
       validateStatus: function (status) {
         console.log(status);
         if (status == 404) {
+          console.error(`invalid URL:${apiUrl}`);
           document.querySelector("#city-input").classList.add("city-input");
+          document
+            .querySelector("#city-input")
+            .classList.remove("city-input-default");
         } else {
           document.querySelector("#city-input").classList.remove("city-input");
+          document
+            .querySelector("#city-input")
+            .classList.add("city-input-default");
         }
-        return status < 500; // Resolve only if the status code is less than 500
+        return status == 200; // Resolve only if the status code is less than 500
       },
     })
     .then(displayWeatherCondition);
@@ -239,6 +246,10 @@ function sunriseSunset(coordinates) {
 function showWeatherAndForeastByPosition(position) {
   weatherByPosition(position);
   dailyTemperature(position);
+}
+
+function showCurrentPositionWeather() {
+  navigator.geolocation.getCurrentPosition(weatherByPosition);
 }
 
 navigator.geolocation.getCurrentPosition(showWeatherAndForeastByPosition);
