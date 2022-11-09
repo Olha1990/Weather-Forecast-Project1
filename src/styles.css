@@ -64,3 +64,12 @@ video {
 .city-input {
   background-color: coral;
 }
+
+@media (max-width: 900px) {
+  .col-1 {
+    font-size: 10px;
+  }
+  .col-3 {
+    font-size: 10px;
+  }
+}
